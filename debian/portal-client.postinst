@@ -1,0 +1,32 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "configure" ] || [ "$1" = "reconfigure" ] ; then
+	# create portal-client group
+	if ! getent group portal-client >/dev/null; then
+		addgroup --system portal-client
+	fi
+
+	# create portal-client user
+	if ! getent passwd portal-client >/dev/null; then
+		adduser --system \
+		--ingroup portal-client \
+		--home /var/lib/portal-client \
+                --no-create-home \
+		--gecos "RCC Portal Service User" \
+                --disabled-login portal-client
+	fi
+
+    mkdir -p /var/lib/portal-client
+    chown portal-client:portal-client /var/lib/portal-client
+
+    mkdir -p /var/log/portal-client
+    chmod 1775 /var/log/portal-client
+    chown root:portal-client /var/log/portal-client
+fi
+
+#DEBHELPER#
+
+exit 0
+

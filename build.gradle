@@ -1,0 +1,100 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath 'org.ajoberstar:grgit:1.1.0'
+	}
+}
+
+plugins {
+	id 'java'
+	id 'application'
+	id 'distribution'
+	id 'fr.brouillard.oss.gradle.jgitver' version '0.8.0'
+}
+
+jgitver {
+	useDistance true
+	useGitCommitID true
+	useDirty true
+	autoIncrementPatch false
+}
+
+repositories {
+	mavenCentral()
+}
+
+mainClassName = 'au.edu.uq.rcc.portal.client.PortalClient'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+dependencies {
+	implementation group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.12.1'
+
+	/* Spring dependencies */
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '2.2.1.RELEASE'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.1.RELEASE'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.2.1.RELEASE'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.2.1.RELEASE'
+
+	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.2.1.RELEASE'
+	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.2.1.RELEASE'
+	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: '5.2.1.RELEASE'
+	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: '5.2.1.RELEASE'
+
+	implementation group: 'org.springframework.session', name: 'spring-session-jdbc', version: '2.2.0.RELEASE'
+
+	/* Bouncycastle */
+	implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.52'
+	implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.52'
+
+	testImplementation 'junit:junit:4.12'
+
+	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '+'
+	implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.8'
+}
+
+distributions {
+	main {
+		distZip.enabled false
+		contents {
+			eachFile {
+				if(it.relativePath.segments[-2] == 'lib') {
+					it.mode = 0644
+				} else if(it.relativePath.segments[-2] == 'bin') {
+					it.mode = 0755
+				}
+			}
+
+			into('etc/portal-client') {
+				from('application.sample.yml')
+				rename('application.sample.yml', 'application.yml')
+				fileMode 0644
+			}
+
+			into('etc/portal-client') {
+				from('logback-spring.xml')
+				fileMode 0644
+			}
+		}
+	}
+
+	deb {
+		distZip.enabled false
+		distTar.enabled false
+		contents { with distributions.main.contents }
+	}
+}
+
+distTar {
+	compression Compression.GZIP
+	extension 'tar.gz' /* Not .tgz */
+}
+
+installDebDist {
+	destinationDir = new File('debian/portal-client')
+}

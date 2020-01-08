@@ -1,0 +1,17 @@
+/target/
+**/.gradle/
+**/.idea/
+**/build/
+/src/main/resources/application.yml
+/.citemp
+**/*.deb
+**/*.buildinfo
+**/*.changes
+/debian/*.log
+/debian/*.debhelper
+/debian/changelog
+/debian/files
+/debian/package/
+/debian/portal-client/
+/debian/portal-client.substvars
+/debian/debhelper-build-stamp

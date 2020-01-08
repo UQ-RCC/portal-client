@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+if [ "${1}" = "purge" ] ; then
+	if [ -d /var/lib/portal-client ]; then
+		rm -rf /var/lib/portal-client
+	fi
+	if [ -d /var/log/portal-client ]; then
+		rm -rf /var/log/portal-client
+	fi
+	if [ -d /etc/portal-client ]; then
+		rm -rf /etc/portal-client
+	fi
+fi
+
+#DEBHELPER#
+
+exit 0
