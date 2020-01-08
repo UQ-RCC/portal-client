@@ -16,7 +16,7 @@ cache:
     - $TRAVIS_BUILD_DIR/.citemp/wrapper
 
 script:
-  - ./gradlew distTar
+  - ./gradlew --quiet -g .citemp --no-daemon distTar
   - make -f Makefile.deb all
 
 install: true
