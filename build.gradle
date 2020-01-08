@@ -84,8 +84,8 @@ distributions {
 	}
 
 	deb {
-		distZip.enabled false
-		distTar.enabled false
+		debDistZip.enabled false
+		debDistTar.enabled false
 		contents { with distributions.main.contents }
 	}
 }
