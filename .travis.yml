@@ -6,6 +6,7 @@ addons:
     packages:
       - debhelper
       - make
+      - fakeroot
 before_cache:
   - rm -f $TRAVIS_BUILD_DIR/.citemp/caches/modules-2/modules-2.lock
   - rm -rf $TRAVIS_BUILD_DIR/.citemp/caches/*/plugin-resolution/
