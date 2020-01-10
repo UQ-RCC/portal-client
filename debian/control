@@ -8,7 +8,7 @@ Vcs-Browser: https://github.com/UQ-RCC/portal-client
 
 Package: portal-client
 Architecture: all
-Depends: default-jre (>= 1.11), adduser
+Depends: default-jre-headless (>= 1.11), adduser
 Description: RCC Portal Client
  Handles OpenID/OAuth2 for RCC portals
 Suggests: postgresql (>= 10)

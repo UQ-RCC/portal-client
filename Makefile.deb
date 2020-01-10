@@ -7,7 +7,7 @@ MAINTAINER_NAME=Research Computing Centre
 MAINTAINER_EMAIL=rcc-admin@uq.edu.au
 
 
-DEBIAN_FILES=$(addprefix debian/,compat control debian-binary portal-client.postinst portal-client.postrm portal-client.service rules)
+DEBIAN_FILES=$(addprefix debian/,compat control debian-binary ${PACKAGE_NAME}.postinst ${PACKAGE_NAME}.postrm ${PACKAGE_NAME}.service rules)
 
 all: ${PACKAGE_FILE}
 
