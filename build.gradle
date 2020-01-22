@@ -80,6 +80,11 @@ distributions {
 				from('logback-spring.xml')
 				fileMode 0644
 			}
+
+			into("etc/${project.name}") {
+				from("src/main/resources/au/edu/uq/rcc/portal/client/schema.sql")
+				fileMode 0644
+			}
 		}
 	}
 
