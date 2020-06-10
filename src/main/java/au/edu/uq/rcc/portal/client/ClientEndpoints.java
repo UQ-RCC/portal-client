@@ -19,8 +19,6 @@
  */
 package au.edu.uq.rcc.portal.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -30,8 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -45,10 +41,7 @@ import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -73,9 +66,6 @@ public class ClientEndpoints {
 
 	@Autowired
 	private ObjectMapper mapper;
-
-	@Autowired
-	private JdbcTemplate jdbc;
 
 	@Autowired
 	private OAuth2AuthorizedClientService authorizedClientService;
@@ -224,66 +214,5 @@ public class ClientEndpoints {
 		on.put("access_token", at.getTokenValue());
 
 		return new ResponseEntity<>(on, HttpStatus.OK);
-	}
-
-	/*
-	 * These should really be in another serivce as we can't properly validate access tokens,
-	 * but until the frontend's fixed...
-	 *
-	 * Also CSRF should be re-enabled for this endpoint when moved.
-	 */
-	@RequestMapping(value = "/api/preference/{service}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JsonNode> preferenceGet(HttpServletRequest request, HttpServletResponse response, @PathVariable("service") String service) {
-		if(service.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		ClientRegistration reg = clientRegistrationRepository.findByRegistrationId(service);
-		if(reg == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		SessionInfo si = SessionInfo.wrap(request.getSession());
-		String uid = si.getUid(service);
-		if(uid == null || si.getAccessToken(service) == null) {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
-
-		JsonNode jn = mapper.createObjectNode();
-		SqlRowSet rs = jdbc.queryForRowSet("SELECT id, data FROM preferences WHERE uid = ?", uid);
-		if(rs.next()) {
-			try {
-				jn = mapper.readTree(rs.getString("data"));
-			} catch(JsonProcessingException e) {
-				LOGGER.error("Error Pg JSONB->Jackson conversion failed.", e);
-			}
-		}
-
-		return new ResponseEntity<>(jn, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/api/preference/{service}", method = RequestMethod.PUT, consumes = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<JsonNode> preferencePut(HttpServletRequest request, @PathVariable("service") String service, @RequestBody JsonNode data) {
-		if(service.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		ClientRegistration reg = clientRegistrationRepository.findByRegistrationId(service);
-		if(reg == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		SessionInfo si = SessionInfo.wrap(request.getSession());
-		String uid = si.getUid(service);
-		if(uid == null || si.getAccessToken(service) == null) {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
-
-		jdbc.update("INSERT INTO preferences(uid, provider, data) VALUES(?, ?, ?::JSONB) ON CONFLICT(uid, provider) DO UPDATE SET data=EXCLUDED.data",
-				uid,
-				service,
-				data.toString()
-		);
-		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

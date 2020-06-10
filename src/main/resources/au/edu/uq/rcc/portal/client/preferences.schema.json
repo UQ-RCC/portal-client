@@ -1,0 +1,360 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "bookmark": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "label"
+      ],
+      "additionalProperties": false
+    },
+    "lastPath": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "loadpsf": {
+              "type": "string"
+            },
+            "selectfiles": {
+              "type": "string"
+            },
+            "selectfolders": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "namednumber": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "label",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "position": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "z": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z"
+      ],
+      "additionalProperties": false
+    },
+    "optintarray": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "array",
+          "items": {"type": "number"}
+        }
+      ]
+    },
+    "optnumber": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "number"
+        }
+      ]
+    },
+    "file": {
+      "type": "object",
+      "properties": {
+        "pixelW": { "type": "number" },
+        "pixelH": { "type": "number" },
+        "pixelD": { "type": "number" },
+        "stddev": { "type": "number" },
+        "maxSizeM": { "type": "number" },
+        "dr": { "type": "number" },
+        "dz": { "type": "number" },
+        "x": {"type": "integer"},
+        "y": {"type": "integer"},
+        "z": {"type": "integer"},
+        "c": {"type": "integer"},
+        "t": {"type": "integer"},
+        "total": {"type": "integer"},
+        "threshold": {"type": "number"},
+        "defaultoutput": {"type": "string"},
+        "path": {"type": "string"},
+        "name": {"type": "string"},
+        "ftype": {"enum": ["folder"]},
+        "unit": {"enum": ["inch"]},
+        "channels": {
+          "type": "array",
+          "items": {          "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "iterations": {"type": "integer"},
+              "wavelength": {"type": "integer"},
+              "pinhole": {"type": "integer"},
+              "background": {"type": "integer"}
+            },
+            "additionalProperties": false}
+        }
+      },
+      "additionalProperties": false
+    },
+    "pref": {
+      "type": "object",
+      "properties": {
+        "files": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/file" }
+        },
+        "psfType": {
+          "type": "integer"
+        },
+        "preference": {
+          "type": "object",
+          "properties": {
+            "NA": {
+              "type": "number"
+            },
+            "RI": {
+              "type": "number"
+            },
+            "ns": {
+              "type": "number"
+            },
+            "mem": {
+              "type": "integer"
+            },
+            "gpus": {
+              "type": "integer"
+            },
+            "angle": {
+              "type": "number"
+            },
+            "split": {
+              "$ref": "#/definitions/namednumber"
+            },
+            "deskew": {
+              "type": "boolean"
+            },
+            "folder": {
+              "type": "string"
+            },
+            "swapZT": {
+              "type": "boolean"
+            },
+            "tiling": {
+              "$ref": "#/definitions/position"
+            },
+            "padding": {
+              "$ref": "#/definitions/position"
+            },
+            "psfFile": {
+              "type": "string"
+            },
+            "psfInfo": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "integer"
+                },
+                "y": {
+                  "type": "integer"
+                },
+                "z": {
+                  "type": "integer"
+                },
+                "c": {
+                  "type": "integer",
+                  "default": -1
+                },
+                "t": {
+                  "type": "integer",
+                  "default": -1
+                },
+                "dr": {
+                  "type": "number"
+                },
+                "dz": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y",
+                "z",
+                "dr",
+                "dz"
+              ],
+              "additionalProperties": false
+            },
+            "scaling": {
+              "$ref": "#/definitions/namednumber"
+            },
+            "pinholes": {
+              "$ref": "#/definitions/optintarray"
+            },
+            "psfModel": {
+              "$ref": "#/definitions/namednumber"
+            },
+            "splitIdx": {
+              "$ref": "#/definitions/namednumber"
+            },
+            "pixelUnit": {
+              "enum": [
+                "micron"
+              ]
+            },
+            "prefilter": {
+              "$ref": "#/definitions/namednumber"
+            },
+            "swapPsfZT": {
+              "type": "boolean"
+            },
+            "threshold": {
+              "type": "integer"
+            },
+            "autoDetect": {
+              "type": "boolean"
+            },
+            "fileformat": {
+              "$ref": "#/definitions/namednumber"
+            },
+            "iterations": {
+              "$ref": "#/definitions/optintarray"
+            },
+            "keepDeskew": {
+              "type": "boolean"
+            },
+            "pixelWidth": {
+              "type": "number"
+            },
+            "postfilter": {
+              "$ref": "#/definitions/namednumber"
+            },
+            "voxelDepth": {
+              "type": "number"
+            },
+            "backgrounds": {
+              "$ref": "#/definitions/optintarray"
+            },
+            "generatePsf": {
+              "type": "boolean"
+            },
+            "pixelHeight": {
+              "type": "number"
+            },
+            "readSpacing": {
+              "type": "boolean"
+            },
+            "wavelengths": {
+              "$ref": "#/definitions/optintarray"
+            },
+            "axialSpacing": {
+              "type": "integer"
+            },
+            "backgroundType": {
+              "type": "string"
+            },
+            "lateralSpacing": {
+              "type": "integer"
+            },
+            "modifyMetaData": {
+              "type": "boolean"
+            },
+            "outputBasePath": {
+              "type": "string"
+            },
+            "readPsfSpacing": {
+              "type": "boolean"
+            },
+            "regularization": {
+              "type": "integer"
+            },
+            "separateOutputs": {
+              "type": "boolean"
+            },
+            "nsPresetSelected": {
+              "$ref": "#/definitions/namednumber"
+            },
+            "outputFolderName": {
+              "type": "string"
+            },
+            "riPresetSelected": {
+              "$ref": "#/definitions/namednumber"
+            },
+            "blindDeconvolution": {
+              "type": "boolean"
+            },
+            "regularizationType": {
+              "$ref": "#/definitions/namednumber"
+            },
+            "numberOfParallelJobs": {
+              "type": "integer"
+            },
+            "lightSheetIlluminationNA": {
+              "type": "number"
+            },
+            "automaticRegularizationScale": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "bookmarks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/bookmark"
+      }
+    },
+    "lastPaths": {
+      "type": "object",
+      "patternProperties": {
+        "^.*$": {
+          "$ref": "#/definitions/lastPath"
+        }
+      }
+    },
+    "psfType": false,
+    "pref": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/pref"
+      }
+    }
+  }
+}
