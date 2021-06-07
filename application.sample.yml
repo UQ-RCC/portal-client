@@ -32,3 +32,10 @@ spring:
             issuer-uri: https://keycloak.example.com/auth/realms/example-realm1
           example-realm2:
             issuer-uri: https://keycloak.example.com/auth/realms/example-realm2
+management:
+  server:
+    port: 9001
+  endpoint:
+    health:
+      probes:
+        enabled: true
