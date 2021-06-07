@@ -14,7 +14,8 @@ PrivateTmp=true
 WorkingDirectory=/var/lib/portal-client
 ExecStart=/usr/share/portal-client/bin/portal-client \
     --spring.config.location=/etc/portal-client/application.yml \
-    --logging.config=/etc/portal-client/logback-spring.xml
+    --logging.config=/etc/portal-client/logback-spring.xml \
+    run
 SuccessExitStatus=143
 
 [Install]
