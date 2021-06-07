@@ -28,6 +28,11 @@ repositories {
 
 mainClassName = 'au.edu.uq.rcc.portal.client.PortalClient'
 
+ext {
+	SPRING_BOOT_VERSION     = '2.4.3'
+	SPRING_SECURITY_VERSION = '5.4.5'
+}
+
 sourceCompatibility = 11
 targetCompatibility = 11
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -35,16 +40,18 @@ targetCompatibility = 11
 dependencies {
 	implementation group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.12.1'
 
-	/* Spring dependencies */
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '2.2.1.RELEASE'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.1.RELEASE'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.2.1.RELEASE'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.2.1.RELEASE'
+	implementation group: 'net.sourceforge.argparse4j', name: 'argparse4j', version: '0.7.0'
 
-	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.2.1.RELEASE'
-	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.2.1.RELEASE'
-	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: '5.2.1.RELEASE'
-	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: '5.2.1.RELEASE'
+	/* Spring dependencies */
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: SPRING_BOOT_VERSION
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: SPRING_BOOT_VERSION
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: SPRING_BOOT_VERSION
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: SPRING_BOOT_VERSION
+
+	implementation group: 'org.springframework.security', name: 'spring-security-core', version: SPRING_SECURITY_VERSION
+	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: SPRING_SECURITY_VERSION
+	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: SPRING_SECURITY_VERSION
+	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: SPRING_SECURITY_VERSION
 
 	implementation group: 'org.springframework.session', name: 'spring-session-jdbc', version: '2.2.0.RELEASE'
 
