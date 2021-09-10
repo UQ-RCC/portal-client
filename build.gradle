@@ -30,7 +30,7 @@ mainClassName = 'au.edu.uq.rcc.portal.client.PortalClient'
 
 ext {
 	SPRING_BOOT_VERSION     = '2.4.3'
-	SPRING_SECURITY_VERSION = '5.4.5'
+	SPRING_SECURITY_VERSION = '5.5.2'
 }
 
 sourceCompatibility = 11
